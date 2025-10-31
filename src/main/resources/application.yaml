@@ -1,0 +1,17 @@
+spring:
+  application:
+    name=learnflix
+  datasource:
+    url: jdbc:postgresql://localhost:5432/learnflix
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-plataform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+  flyway:
+    enable: true
