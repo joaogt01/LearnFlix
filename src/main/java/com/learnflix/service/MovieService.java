@@ -31,7 +31,7 @@ public class MovieService {
     }
 
     public List<Movie> findAll(){
-        return movieRepository.findAll();
+        return movieRepository.findTop5ByOrderByRatingDesc();
     }
 
     public Optional<Movie> update(Long movieId, Movie updateMovie){
@@ -58,6 +58,10 @@ public class MovieService {
         }
 
         return Optional.empty();
+    }
+
+    public void delete(Long movieId){
+        movieRepository.deleteById(movieId);
     }
 
     public List<Movie> findByCategory(Long categoryId){

@@ -5,6 +5,7 @@ import com.learnflix.controller.response.CategoryResponse;
 import com.learnflix.entity.Category;
 import com.learnflix.mapper.CategoryMapper;
 import com.learnflix.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryResponse saveCategory(@RequestBody CategoryRequest request){
+    public CategoryResponse saveCategory(@Valid @RequestBody CategoryRequest request){
         Category newCategory = CategoryMapper.toCategory(request);
         Category savedCategory = categoryService.saveCategory(newCategory);
         return CategoryMapper.toCategoryResponse(savedCategory);

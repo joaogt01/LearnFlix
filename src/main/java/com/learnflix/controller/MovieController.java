@@ -5,11 +5,14 @@ import com.learnflix.controller.response.MovieResponse;
 import com.learnflix.entity.Movie;
 import com.learnflix.mapper.MovieMapper;
 import com.learnflix.service.MovieService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/learnflix/movie")
@@ -19,7 +22,7 @@ public class MovieController {
     private final MovieService movieService;
 
     @PostMapping
-    public ResponseEntity<MovieResponse> save(@RequestBody MovieRequest request){
+    public ResponseEntity<MovieResponse> save(@Valid @RequestBody MovieRequest request){
         Movie savedMovie = movieService.save(MovieMapper.toMovie(request));
         return ResponseEntity.ok(MovieMapper.toMovieResponse(savedMovie));
     }
@@ -40,7 +43,7 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovieResponse> update(@PathVariable Long id, @RequestBody MovieRequest request){
+    public ResponseEntity<MovieResponse> update(@PathVariable Long id,@Valid @RequestBody MovieRequest request){
         return movieService.update(id, MovieMapper.toMovie(request))
                 .map(movie -> ResponseEntity.ok(MovieMapper.toMovieResponse(movie)))
                 .orElse(ResponseEntity.notFound().build());
@@ -52,5 +55,15 @@ public class MovieController {
                 .stream()
                 .map(MovieMapper::toMovieResponse)
                 .toList());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        Optional<Movie> optionalMovie = movieService.findById(id);
+        if (optionalMovie.isPresent()){
+            movieService.delete(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

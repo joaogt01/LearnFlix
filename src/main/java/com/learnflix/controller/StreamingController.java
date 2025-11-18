@@ -5,6 +5,7 @@ import com.learnflix.controller.response.StreamingResponse;
 import com.learnflix.entity.Streaming;
 import com.learnflix.mapper.StreamingMapper;
 import com.learnflix.service.StreamingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class StreamingController {
     }
 
     @PostMapping
-    public StreamingResponse saveStreaming(@RequestBody StreamingRequest request){
+    public StreamingResponse saveStreaming(@Valid @RequestBody StreamingRequest request){
         Streaming newStreaming = StreamingMapper.toStreaming(request);
         Streaming savedStreaming = streamingService.save(newStreaming);
         return StreamingMapper.toStreamingResponse(savedStreaming);
